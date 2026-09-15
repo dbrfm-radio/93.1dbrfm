@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<title>93.1 DBR FM - The Best!</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
+body { background:#222; display:flex; justify-content:center; }
+.app { width:100%; max-width:420px; background:white; min-height:100vh; display:flex; flex-direction:column; position:relative; }
+.top-header { background:#0B3D2E; color:white; display:flex; align-items:center; padding:12px; gap:10px; }
+.header-logo-small { width:52px; height:52px; border-radius:50%; background:white; object-fit:contain; }
+.header-text h1 { font-size:20px; line-height:1; }
+.header-text p { font-size:12px; color:#ffcc00; letter-spacing:2px; }
+.header-icons { margin-left:auto; display:flex; gap:18px; font-size:22px; cursor:pointer; }
+.tabs { display:flex; justify-content:space-around; background:#0B3D2E; color:white; padding:12px 0; border-top:1px solid #333; }
+.tab { background:none; border:none; color:#aaa; font-weight:bold; cursor:pointer; font-size:14px; }
+.tab.active { color:white; border-bottom:2px solid white; padding-bottom:3px; }
+.content { flex:1; padding:0; overflow-y:auto; padding-bottom:110px; }
+.tab-content { display:none; padding:15px; }
+.tab-content.active { display:block; }
+
+/* HOME - DAKONG LOGO RA */
+#home { padding:0; display:none; align-items:center; justify-content:center; min-height:65vh; background:white; }
+#home.active { display:flex; }
+.logo-big { width:90%; max-width:360px; height:auto; max-height:380px; object-fit:contain; background:transparent; display:block; }
+
+.section-black { 
+    background:#0B3D2E; 
+    color:white; 
+    text-align:center; 
+    padding:7px; 
+    margin:18px 0 10px; 
+    font-weight:bold; 
+    font-size:14px; 
+}
+.desc-text { font-size:14px; line-height:1.5; padding:0 5px; }
+.divider { height:1px; background:#ddd; margin:25px 0; position:relative; }
+.divider::after { content:'((•))'; position:absolute; left:50%; transform:translateX(-50%); top:-9px; background:white; padding:0 12px; font-size:11px; color:#888; }
+.pill-btn { 
+    background:#0B3D2E; 
+    color:white; 
+    border:none; 
+    padding:13px 32px; 
+    border-radius:30px; 
+    display:block; 
+    margin:12px auto; 
+    font-weight:bold; 
+    cursor:pointer; 
+}
+.page-title-bar { background:#111; color:white; padding:13px; margin:-15px -15px 15px -15px; font-weight:bold; display:flex; align-items:center; gap:15px; font-size:16px; }
+.mail-form { display:flex; flex-direction:column; gap:12px; }
+.mail-form input, .mail-form textarea { background:#d3d3d3; border:none; padding:14px; width:100%; font-size:14px; outline:none; }
+.mail-form textarea { height:130px; resize:none; }
+.player { position:fixed; bottom:0; width:100%; max-width:420px; background:#0B3D2E; color:white; padding:10px 15px 15px; border-top:1px solid #333; }
+.player-top { display:flex; justify-content:space-between; font-size:11px; margin-bottom:10px; color:#aaa; }
+.live-dot { color:#ff3b3b; font-weight:bold; }
+.player-controls { display:flex; align-items:center; gap:15px; }
+.play-btn { width:56px; height:56px; border-radius:50%; border:none; font-size:22px; cursor:pointer; background:#fff; color:#111; }
+#volume { flex:1; accent-color:white; }
+.timer-btn { background:#333; border:none; color:white; font-size:18px; width:40px; height:40px; border-radius:50%; }
+.social-box { text-align:center; margin-top:50px; }
+.social-btn { display:inline-block; margin-top:15px; background:#111; color:white; padding:10px 22px; border-radius:22px; text-decoration:none; font-weight:bold; }
+.version { text-align:center; margin-top:40px; font-weight:bold; font-size:13px; }
+.dev-by { text-align:center; margin-top:15px; }
+
+/* PRIVACY POLICY */
+
+.privacy-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+}
+
+.privacy-modal.show {
+    display: flex;
+}
+
+.privacy-box {
+    width: 100%;
+    max-width: 400px;
+    max-height: 85vh;
+
+    background: white;
+    border-radius: 15px;
+
+    overflow-y: auto;
+}
+
+.privacy-header {
+    background: #0B3D2E;
+    color: white;
+
+    padding: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.privacy-header h2 {
+    font-size: 18px;
+}
+
+.privacy-close {
+    background: none;
+    border: none;
+
+    color: white;
+    font-size: 30px;
+
+    cursor: pointer;
+}
+
+.privacy-body {
+    padding: 20px;
+
+    color: #222;
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.privacy-body h3 {
+    color: #0B3D2E;
+
+    margin-top: 18px;
+    margin-bottom: 6px;
+}
+
+.privacy-ok {
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 13px;
+
+    border: none;
+    border-radius: 30px;
+
+    background: #0B3D2E;
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+/* SCHOOL INFORMATION MODAL */
+
+.school-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 10000;
+
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.school-modal.show {
+    display: flex;
+}
+
+.school-box {
+    width: 100%;
+    max-width: 400px;
+    max-height: 85vh;
+    background: white;
+    border-radius: 15px;
+    overflow-y: auto;
+}
+
+.school-header {
+    background: #0B3D2E;
+    color: white;
+    padding: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.school-header h2 {
+    font-size: 18px;
+}
+
+.school-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.school-body {
+    padding: 20px;
+    color: #222;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.school-body h3 {
+    color: #4F7F5A;
+    font-size: 24px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.school-body .school-name {
+    color: #E9A83B;
+    font-weight: bold;
+}
+
+.school-body ol {
+    padding-left: 25px;
+}
+
+.school-body li {
+    margin-bottom: 8px;
+}
+
+.school-body .core-title {
+    color: #4F7F5A;
+    font-weight: bold;
+    font-size: 22px;
+    margin-top: 15px;
+}
+
+.school-body .core-values {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.school-body .core-values li {
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+/* STATION TAGLINE */
+
+.header-text {
+    min-width: 0;
+}
+
+.header-text h1 {
+    font-size: 20px;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.tagline-wrapper {
+    width: 220px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.tagline {
+    color: #ffcc00;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
+
+    animation: taglineScroll 8s linear infinite;
+}
+
+@keyframes taglineScroll {
+    0% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+    <header class="top-header">
+        <img src="logo.png" class="header-logo-small" onerror="this.src='https://via.placeholder.com/100?text=DBR'">
+        <div class="header-text">
+    <h1>93.1 DBR FM STATION</h1>
+    <div class="tagline-wrapper">
+        <div class="tagline">
+            The Station Of The New Normal
+        </div>
+    </div>
+</div>
+        <div class="header-icons">
+    <span onclick="openSchoolInfo()">⋮</span>
+</div>
+    </header>
+
+    <nav class="tabs">
+        <button class="tab active" id="t-home" onclick="showTab('home')">HOME</button>
+        <button class="tab" id="t-social" onclick="showTab('social')">SOCIAL</button>
+        <button class="tab" id="t-about" onclick="showTab('about')">ABOUT</button>
+    </nav>
+
+    <main class="content">
+        <!-- HOME LANG ANG NAAY DAKONG LOGO -->
+        <div id="home" class="tab-content active">
+            <img src="logo.png" class="logo-big" alt="93.1 DBR FM Logo" onerror="this.src='https://via.placeholder.com/350x350?text=logo.png'">
+        </div>
+
+        <!-- SOCIAL - lahi na content -->
+        <div id="social" class="tab-content">
+            <div class="social-box">
+    <h2>Follow Us!</h2>
+    <p>93.1 DBR FM - The Station Of The New Normal!</p>
+
+    <a
+        class="social-btn"
+        href="https://www.facebook.com/dbr93.1"
+        target="_blank">
+        Visit Facebook
+    </a>
+</div>
+        </div>
+
+        <!-- ABOUT - parehas sa screenshot -->
+        <div id="about" class="tab-content">
+            <div class="section-black">DESCRIPTION</div>
+           <p class="desc-text">
+    <b>93.1 Debesmscat Buffalo Radio Station</b><br>
+    The Official Radio Station of the State College of Masbate.
+    <br><br>
+    #TogetherEveryoneAchievesMore<br>
+    #WhereTransformationBegins
+</p>
+            <div class="section-black">CONTACT DETAILS</div>
+            <p class="desc-text">✉️ Email: debesmscatbuffaloradio@gmail.com<br>📍 Cabitan, Mandaon, Masbate</p>
+            <div class="divider"></div>
+            <button class="pill-btn" onclick="openPrivacy()">PRIVACY POLICY</button>
+            <div class="divider"></div>
+            <div class="dev-by">
+    <p style="font-size:13px; font-weight:bold;">DEVELOPED BY</p>
+
+    <h2 style="color:#e60000; margin:5px 0; font-size:20px;">
+    RENZ-KYE BALATUCAN AMOROTO
+</h2>
+
+    <p style="font-size:12px; color:#666; margin-top:5px;">
+        BS INFORMATION SYSTEMS STUDENT
+    </p>
+
+    <small style="letter-spacing:3px; color:#888;">
+        93.1 DBR FM • STREAMS ONLINE
+    </small>
+</div>
+                
+            <p class="version">Build Version: 1.0.0</p>
+        </div>
+
+        <!-- SENDMAIL & SETTINGS -->
+        <div id="sendmail" class="tab-content">
+            <div class="page-title-bar"><span onclick="showTab('home')">←</span> Send Mail</div>
+            <form id="mailForm" class="mail-form">
+                <input type="text" id="name" placeholder="Name" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="text" id="subject" placeholder="Subject" required>
+                <input type="tel" id="phone" placeholder="Phone">
+                <textarea id="message" placeholder="Your Message To The Station" required></textarea>
+                <button type="submit" class="pill-btn">SEND MAIL</button>
+            </form>
+        </div>
+        <div id="settings" class="tab-content">
+            <div class="page-title-bar"><span onclick="showTab('home')">←</span> Settings</div>
+            <p style="font-size:13px; padding:10px 0;">Settings para sa player.</p>
+        </div>
+        
+    </main>
+
+    <footer class="player">
+        <div class="player-top"><span class="live-dot">• LIVE!</span><span id="timer">00:00</span></div>
+        <div class="player-controls">
+            <button id="playBtn" class="play-btn">▶</button>
+            <input type="range" id="volume" min="0" max="100" value="80">
+            <button class="timer-btn">◷</button>
+        </div>
+       <audio id="radio" preload="auto" crossorigin="anonymous"></audio>
+    </footer>
+</div>
+
+<!-- PRIVACY POLICY -->
+
+<div id="privacyModal" class="privacy-modal">
+
+    <div class="privacy-box">
+
+        <div class="privacy-header">
+
+            <h2>PRIVACY POLICY</h2>
+
+            <button
+                class="privacy-close"
+                onclick="closePrivacy()">
+                ×
+            </button>
+
+        </div>
+
+        <div class="privacy-body">
+
+    <h3>93.1 DBR FM - The Best!</h3>
+
+    <p>
+        93.1 DBR FM is an online radio application
+        that allows users to listen to our radio
+        broadcast through an internet connection.
+    </p>
+
+    <h3>1. Information We Collect</h3>
+
+    <p>
+        We do not collect, store, or require users
+        to provide personal information just to listen
+        to our online radio.
+    </p>
+
+    <h3>2. How the App Works</h3>
+
+    <p>
+        Once the application is opened, users can
+        directly listen to the available radio stream.
+        An internet connection may be required to
+        receive the radio broadcast.
+    </p>
+
+    <h3>3. Personal Information</h3>
+
+    <p>
+        We do not intentionally collect personal
+        information such as your name, address,
+        phone number, or other personal details
+        through the radio player.
+    </p>
+
+    <h3>4. Internet Connection</h3>
+
+    <p>
+        The application connects to the internet
+        to provide the online radio stream. Your
+        internet or mobile service provider may
+        independently process network information
+        according to their own policies.
+    </p>
+
+    <h3>5. Contact</h3>
+
+    <p>
+        If you have questions about this Privacy
+        Policy, you may contact us at:
+        <br>
+        <b>debesmscatbuffaloradio@gmail.com</b>
+    </p>
+
+    <p>
+        <b>Last Updated:</b> September 2026
+    </p>
+
+    <button
+        class="privacy-ok"
+        onclick="closePrivacy()">
+        CLOSE
+    </button>
+
+</div>
+
+    </div>
+
+</div>
+
+<!-- SCHOOL INFORMATION -->
+
+<div id="schoolInfoModal" class="school-modal">
+
+    <div class="school-box">
+
+        <div class="school-header">
+
+            <h2>SCHOOL INFORMATION</h2>
+
+            <button
+                class="school-close"
+                onclick="closeSchoolInfo()">
+                ×
+            </button>
+
+        </div>
+
+        <div class="school-body">
+
+            <h3>Vision</h3>
+
+            <p>
+                By 2050,
+                <span class="school-name">DEBESMSCAT</span>
+                is a premier university that is globally focused,
+                nationally recognized, and committed to the
+                transformation of Masbate.
+            </p>
+
+
+            <h3>Mission</h3>
+
+            <ol>
+
+                <li>
+                    Provide quality education, research, extension
+                    and production with accessible, data-driven,
+                    and internationalized quality service;
+                </li>
+
+                <li>
+                    Produce academically and skills-prepared,
+                    values oriented and leadership-honed graduates
+                    that are lifelong learners and global
+                    market-ready;
+                </li>
+
+                <li>
+                    Establish Centers of Development and Center
+                    of Excellence for all the flagship programs
+                    of the institution; and
+                </li>
+
+                <li>
+                    Ensure partnership with multi-sectoral local,
+                    national and international institutions for
+                    academic research, production and
+                    community-based collaboration.
+                </li>
+
+            </ol>
+
+
+            <h3>Quality Policy</h3>
+
+            <p>
+                <span class="school-name">DEBESMSCAT</span>
+                commits to sustain excellent service delivery
+                in instruction, research, extension and production
+                to satisfy quality standards, legal and clientele
+                requirements, and continual improvement of the
+                Quality Management System.
+            </p>
+
+
+            <div class="core-title">
+                Core Values: RODEO
+            </div>
+
+            <ul class="core-values">
+
+                <li>RESILIENCE</li>
+
+                <li>OPTIMISM</li>
+
+                <li>DEDICATION</li>
+
+                <li>EXCELLENCE, and</li>
+
+                <li>OBEISANCE</li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+const radio=document.getElementById('radio'), playBtn=document.getElementById('playBtn'), timerEl=document.getElementById('timer');
+let playing = false;
+let sec = 0;
+let tmr;
+
+const playlist = [
+    {
+        title: "Music 1",
+        url: "https://files.catbox.moe/meavkt.mp3"
+    },
+    {
+        title: "Music 2",
+        url: "https://files.catbox.moe/8fr7ij.mp3"
+    },
+    {
+        title: "Music 3",
+        url: "https://files.catbox.moe/64htw8.mp3"
+    },
+    {
+        title: "Music 4",
+        url: "https://files.catbox.moe/5lntya.mp3"
+    },
+    {
+        title: "Music 5",
+        url: "https://files.catbox.moe/tzuevb.mp3"
+    },
+    {
+        title: "Music 6",
+        url: "https://files.catbox.moe/to4tvc.mp3"
+    },
+    {
+        title: "Music 7",
+        url: "https://files.catbox.moe/jffvs1.mp3"
+    },
+    {
+        title: "Music 8",
+        url: "https://files.catbox.moe/v95sbp.mp3"
+    },
+    {
+        title: "Music 9",
+        url: "https://files.catbox.moe/61bh6c.mp3"
+    }
+];
+
+let playlistReady = false;
+
+async function loadPlaylistDurations() {
+    const durationPromises = playlist.map((music) => {
+        return new Promise((resolve, reject) => {
+            const audio = new Audio();
+
+            audio.preload = "metadata";
+
+            audio.addEventListener("loadedmetadata", () => {
+                music.duration = audio.duration;
+                resolve();
+            });
+
+            audio.addEventListener("error", () => {
+                reject(new Error("Dili mabasa ang " + music.title));
+            });
+
+            audio.src = music.url;
+        });
+    });
+
+    await Promise.all(durationPromises);
+    playlistReady = true;
+}
+
+function getRadioPosition() {
+    const now = new Date();
+
+    // Philippine Time (UTC+8)
+    const secondsToday =
+        ((now.getUTCHours() + 8) % 24) * 3600 +
+        now.getUTCMinutes() * 60 +
+        now.getUTCSeconds();
+
+    const totalDuration = playlist.reduce(
+        (total, music) => total + music.duration,
+        0
+    );
+
+    let position = secondsToday % totalDuration;
+
+    for (let i = 0; i < playlist.length; i++) {
+        if (position < playlist[i].duration) {
+            return {
+                index: i,
+                offset: position
+            };
+        }
+
+        position -= playlist[i].duration;
+    }
+
+    return {
+        index: 0,
+        offset: 0
+    };
+}
+
+function showTab(id){
+    document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));
+    if(document.getElementById('t-'+id)) document.getElementById('t-'+id).classList.add('active');
+}
+function openPrivacy(){
+
+    document
+        .getElementById("privacyModal")
+        .classList.add("show");
+
+}
+
+playBtn.onclick = async () => {
+    if (playing) {
+        radio.pause();
+        playBtn.textContent = '▶';
+        clearInterval(tmr);
+        playing = false;
+        return;
+    }
+
+    try {
+        if (!playlistReady) {
+            await loadPlaylistDurations();
+        }
+
+        const position = getRadioPosition();
+        const music = playlist[position.index];
+
+        radio.src = music.url;
+
+        radio.onloadedmetadata = () => {
+            radio.currentTime = position.offset;
+
+            radio.play().then(() => {
+                playBtn.textContent = '⬛';
+                playing = true;
+
+                clearInterval(tmr);
+
+                tmr = setInterval(() => {
+                    const current = getRadioPosition();
+
+                    const m = String(
+                        Math.floor(current.offset / 60)
+                    ).padStart(2, '0');
+
+                    const s = String(
+                        Math.floor(current.offset % 60)
+                    ).padStart(2, '0');
+
+                    timerEl.textContent = `${m}:${s}`;
+                }, 1000);
+
+            }).catch(error => {
+                console.log(error);
+                alert('Dili ma-play ang music.');
+            });
+        };
+
+    } catch (error) {
+        console.log(error);
+        alert('Dili mabasa ang music links.');
+    }
+};
+
+
+radio.addEventListener('ended', () => {
+
+    const currentIndex = playlist.findIndex(
+        music => radio.src.includes(music.url)
+    );
+
+    const nextIndex =
+        currentIndex === -1
+            ? 0
+            : (currentIndex + 1) % playlist.length;
+
+    const nextMusic = playlist[nextIndex];
+
+    radio.src = nextMusic.url;
+
+    radio.onloadedmetadata = () => {
+        radio.currentTime = 0;
+
+        radio.play().then(() => {
+            playBtn.textContent = '⬛';
+            playing = true;
+        }).catch(error => {
+            console.log('Next music error:', error);
+        });
+    };
+});
+
+document.getElementById('volume').oninput=e=>radio.volume=e.target.value/100;
+document.getElementById('mailForm').onsubmit=e=>{
+    e.preventDefault();
+    const emailTo="dbrfm93.1@deped.edu.ph";
+    window.location.href=`mailto:${emailTo}?subject=${document.getElementById('subject').value}&body=${document.getElementById('message').value}`;
+};
+
+function openPrivacy(){
+    document
+        .getElementById("privacyModal")
+        .classList.add("show");
+}
+
+function closePrivacy(){
+    document
+        .getElementById("privacyModal")
+        .classList.remove("show");
+}
+
+function openSchoolInfo() {
+    document
+        .getElementById("schoolInfoModal")
+        .classList.add("show");
+}
+
+function closeSchoolInfo() {
+    document
+        .getElementById("schoolInfoModal")
+        .classList.remove("show");
+}
+</script>
+</body>
+</html>
